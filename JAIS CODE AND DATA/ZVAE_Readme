@@ -2,5 +2,5 @@ This program provides an implementation of the Zermelo Variational Autoencoder (
 Unlike standard VAEs, this model incorporates a Hamiltonian-based physics constraint into the training loss to ensure physical validity of the reconstructed trajectories.
 The encoder compresses 400-dimensional input trajectories into a 32-dimensional latent space, while the decoder reconstructs full trajectories and evaluates their consistency with the Zermelo Hamiltonian dynamics. 
 The loss function combines trajectory reconstruction loss, KL divergence, and a physics-informed penalty derived from the Hamiltonian evaluated at discrete time steps.
-The model is trained on 500/4000 OTD and is capable of generating 1000 synthetic trajectories that retain both statistical and physical properties of the real data. 
+The model is trained on 500/4000 OTD of trajectories and is capable of generating 1000 synthetic trajectories that retain both statistical and physical properties of the real data. 
 The trained model and generated samples are saved for downstream use in navigation, control, or further learning tasks.
