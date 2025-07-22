@@ -1,5 +1,5 @@
 This program presents an implementation of the Split Variational Autoencoder (SplitVAE) for disentangling structured latent representations from noisy(observed) and noiseless(model) trajectory data in the Minimum Threat Exposure Problem.
-SplitVAE uses a dual-latent-space architecture with separate encodings for noisy (z₁) and noiseless (z₂) features. 
+SplitVAE uses a dual-latent-space architecture with separate encodings for noisy (z₁) and common (z₂) features. 
 It is trained on paired data: 200 noisy and 200 noiseless trajectories labeled accordingly.
 A custom loss function selectively applies reconstruction loss to noisy samples, enforces KL divergence on both latent spaces, and regularizes the z₁ encoding for noiseless data using a tunable penalty.
 The model is trained over 1000 epochs, then used to generate 1000 synthetic samples from the learned latent space. 
