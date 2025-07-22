@@ -1,0 +1,250 @@
+# PROGRAM DESCRIPTION: This code trains the GAN model for Zermelo Navigation problem
+import os
+import torch
+import torch.nn as nn
+import pandas as pd
+import numpy as np
+from torch.utils.data import Dataset, DataLoader
+from pathlib import Path
+from torch.autograd.variable import Variable
+import matplotlib.pyplot as plt
+import time
+import csv
+
+
+device = "cuda"
+
+def main():
+    my_batch_size = 64
+
+    data_mintime = np.array(pd.read_csv('C:/Users/nubapat/OneDrive - Worcester Polytechnic Institute (wpi.edu)/2024-JNL-NUBapat/Archives/Scatter-Plots/traindata_mintime_7states_4000_points_GAN.txt'))
+    train_loader = torch.utils.data.DataLoader(data_mintime, batch_size=my_batch_size)
+
+    # Trajectory endpoints; these are fixed in the dataset
+    x_init = [0.0, 0.8]
+    x_term = [-0.8, -0.9]
+
+    start_clock = time.time()
+    modelG = Generator()
+    modelD = Discriminator()
+    modelG.to(device)
+    modelD.to(device)
+    torch.manual_seed(13)
+
+    # STEP 5: Instantiate loss and optimizer
+    loss_dg = nn.BCELoss().to(device)
+    learning_rate_gen = 0.01
+    learning_rate_disc = 0.01
+    optimizerD = torch.optim.SGD(modelD.parameters(), lr=learning_rate_disc)
+    optimizerG = torch.optim.SGD(modelG.parameters(), lr=learning_rate_gen)
+
+    # STEP 7: Train the GAN
+    # Label for fake and real data
+    def ones_target(size):
+        data = Variable(torch.ones(size, 1)).to(device)
+        return data
+
+
+    def zeros_target(size):
+        data = Variable(torch.zeros(size, 1)).to(device)
+        return data
+
+    # Store the initial discriminator weights
+    n_epochs = 500
+    n_iter = 0
+    G_losses = []
+    D_losses = []
+    DISC_ITERATIONS = 1
+    GEN_ITERATIONS = 1
+    for epoch in range(n_epochs):
+
+        for i, (traj) in enumerate(train_loader):
+            for _ in range(DISC_ITERATIONS):
+
+                # DISCRIMINATOR
+                # Reset gradients
+                optimizerD.zero_grad()
+                modelD.zero_grad()
+
+                # Train with real examples from dataset
+                inputs = traj.float().to(device)
+                y_d = modelD(inputs)
+
+                # Calculate errorD and backpropagate
+                errorD_real = loss_dg(y_d, ones_target(len(traj)))
+                # Train with fake examples from generator
+                z = torch.distributions.uniform.Uniform(-1, 1).sample([my_batch_size, input_dimG]).to(device)  # latent vector
+                y_g = modelG(z)
+                y_d_fake = modelD(y_g)
+
+                # Calculate errorD and backpropagate
+                errorD_fake = loss_dg(y_d_fake, zeros_target(my_batch_size))
+                # errorD_fake.backward()
+
+                # Compute errorD of D as sum over the fake and the real batches"""
+                errorD = errorD_fake + errorD_real
+                errorD.backward()
+
+                # Update D
+                optimizerD.step()
+            D_losses.append(errorD.item())
+
+            # GENERATOR
+            # Reset gradients
+            for _ in range(GEN_ITERATIONS):
+                modelG.zero_grad()
+                optimizerG.zero_grad()
+
+                z = torch.distributions.uniform.Uniform(-1, 1).sample([my_batch_size, input_dimG]).to(device)  # latent vector
+                y_gG = modelG(z)
+                y_d_fakeG = modelD(y_gG)  # Since we just updated D, perform another forward pass of all-fake batch through D
+
+                # Calculate errorD and backpropagate """
+                errorG = loss_dg(y_d_fakeG, ones_target(my_batch_size))
+                errorG.backward()
+                optimizerG.step()
+            n_iter += 1
+
+            # Save Losses for plotting later
+            G_losses.append(errorG.item())
+            avg_errorG = sum(G_losses) / len(G_losses)
+            avg_errorD = sum(D_losses) / len(D_losses)
+        print('Epoch [{}/{}], Generator Loss: {:.4f}, Discriminator Loss: {:.4f}'.format(epoch + 1, n_epochs, avg_errorG, avg_errorD))
+
+    stop_clock = time.time()
+    elapsed_hours = int((stop_clock - start_clock) // 3600)
+    elapsed_minutes = int((stop_clock - start_clock) // 60 - elapsed_hours * 60)
+    elapsed_seconds = (stop_clock - start_clock) - elapsed_hours * 3600 - elapsed_minutes * 60
+    torch.save(modelD.state_dict(), 'Discriminatormodel_SGAN.pth')
+    torch.save(modelD.state_dict(), 'Generatormodel_SGAN.pth')
+    print('\nElapsed time ' + str(elapsed_hours) + ':' + str(elapsed_minutes) + ':' + "%.2f" % elapsed_seconds)
+
+    # STEP 9: Generate 1000 samples using the trained generator
+    num_samples = 1000  # Number of samples to generate
+    latent_dim = input_dimG  # Dimension of latent vector
+
+    print("\nGenerating 1000 samples with the trained generator...")
+    generated_samples = []
+
+    # Ensure the generator is in evaluation mode
+    modelG.eval()
+
+    # Generate samples in batches
+    with torch.no_grad():
+        for _ in range(num_samples // my_batch_size):
+            z = torch.distributions.uniform.Uniform(-1, 1).sample([my_batch_size, latent_dim]).to(device)
+            y_generated = modelG(z)
+            generated_samples.append(y_generated.cpu().numpy())
+
+        # Handle remaining samples if num_samples is not a multiple of batch_size
+        remaining_samples = num_samples % my_batch_size
+        if remaining_samples > 0:
+            z = torch.distributions.uniform.Uniform(-1, 1).sample([remaining_samples, latent_dim]).to(device)
+            y_generated = modelG(z)
+            generated_samples.append(y_generated.cpu().numpy())
+
+    # Combine all generated samples
+    generated_samples = np.vstack(generated_samples)
+
+    # Save the generated samples to a CSV file
+    output_csv_path = 'C:/Users/nubapat/OneDrive - Worcester Polytechnic Institute (wpi.edu)/2024-JNL-NUBapat/Archives/Scatter-Plots/SGAN_4000_test'
+    np.savetxt(output_csv_path, generated_samples, delimiter=',')
+
+
+
+
+
+
+# STEP 3A: Create generator model class
+n_features = 175
+input_dimG = 20
+dimG_1 = 64
+dimG_2 = 100
+dimG_3 = 225
+dimG_4 = 400
+dimG_5 = 625
+dimG_6 = 900
+Drop_out = 0.2
+Leaky_ReLu = 0.1
+class Generator(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.layers = nn.Sequential(
+            nn.Linear(input_dimG, dimG_1),  # input layer
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimG_1, dimG_2),  # hidden layer 1
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimG_2, dimG_3),  # hidden layer 2
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimG_3, dimG_4),  # hidden layer 3
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimG_4, dimG_5),  # hidden layer 4
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimG_5, dimG_6),  # hidden layer 5
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            # nn.Linear(dimG_6, dimG_7),  # hidden layer 5
+            # nn.LeakyReLU(Leaky_ReLu),
+            # nn.Dropout(Drop_out),
+            # nn.Linear(1024, 2048),  # hidden layer 6
+            # nn.ReLU(),
+            nn.Linear(dimG_6, n_features)  # output layer
+        )
+
+    def forward(self, x):
+        return self.layers(x)
+
+
+# STEP 3B: Create discriminator model class
+dimD_1 = 900
+dimD_2 = 625
+dimD_3 = 400
+dimD_4 = 225
+dimD_5 = 100
+dimD_6 = 25
+
+class Discriminator(nn.Module):
+    def __init__(self):
+        super().__init__()
+
+        self.layers = nn.Sequential(
+            nn.Linear(n_features, dimD_1),  # input layer
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimD_1, dimD_2),  # hidden layer 1
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimD_2, dimD_3),  # hidden layer 2
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimD_3, dimD_4),  # hidden layer 3
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimD_4, dimD_5),  # hidden layer 4
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimD_5, dimD_6),  # hidden layer 4
+            nn.LeakyReLU(Leaky_ReLu),
+            nn.Dropout(Drop_out),
+            nn.Linear(dimD_6, 1),  # hidden layer 6
+            nn.Sigmoid()  # output layer
+        )
+
+    def forward(self, x):
+        return self.layers(x)
+    def reset_parameters(self):
+        # Reset parameters logic for each layer in the discriminator
+        for layer in self.children():
+            if hasattr(layer, 'reset_parameters'):
+                layer.reset_parameters()
+
+# STEP 4: Instantiate generator and discriminator classes
+if __name__ == "__main__":
+    main()
+#
