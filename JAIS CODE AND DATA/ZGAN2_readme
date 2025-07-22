@@ -1,0 +1,6 @@
+This program presents a physics-informed GAN architecture for the Zermelo Navigation problem that integrates both Hamiltonian dynamics and heading angle constraints into the training process.
+The generator outputs 7-dimensional trajectories (175-dimensional flattened vectors), and additionally computes the Hamiltonian and heading angle at each discretized point along the path. 
+These physics-based quantities are used to penalize deviations from optimal behavior, ensuring physically plausible and directionally consistent outputs. 
+The discriminator evaluates only a subset of each trajectory (first 50 features) to distinguish real from generated samples. 
+Training combines adversarial loss with Hamiltonian and heading angle regularization, using 4000 expert trajectories as reference.
+Post training, the model can generate 1000 physically consistent, time-optimal trajectories which are saved to disk for further analysis or downstream control tasks.
