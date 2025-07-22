@@ -1,0 +1,4 @@
+This program implements a Standard Variational Autoencoder (S-VAE) for high-dimensional trajectory data from linear time-invariant (LTI) systems. 
+Designed to handle large-scale state-control trajectories, the model features a encoder-decoder architecture with Layer Normalization to stabilize training across five hidden layers.
+The training objective combines mean squared reconstruction loss with KL divergence to learn compressed, generative latent representations. 
+After training, the decoder is used to synthesize 1000 realistic trajectory samples, aiding in simulation, data augmentation, or downstream control tasks.
