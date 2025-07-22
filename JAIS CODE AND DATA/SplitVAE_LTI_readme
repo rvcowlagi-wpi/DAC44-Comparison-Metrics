@@ -1,0 +1,6 @@
+This programs implements the Split Variational Autoencoder (SplitVAE) for disentangling structured representations from trajectory data in linear time-invariant (LTI) systems.
+The model learns from both noiseless(model) and noisy(observed) trajectories.
+SplitVAE separates the latent space into two parts: z₁ capturing only noisy features and z₂ capturing common features. 
+The loss function combines mean squared reconstruction error, KL divergences for both latent components, and a noise-aware regularization term. 
+After training for 1000 epochs on 500 noisy and 1000 noiseless trajectories, the decoder is used to generate 1000 synthetic trajectories by sampling from the disentangled latent spaces.
+This setup enables interpretable and noise-resilient trajectory generation for downstream tasks like control, simulation, or system identification.
