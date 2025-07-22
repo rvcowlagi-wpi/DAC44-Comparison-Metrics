@@ -1,4 +1,4 @@
-This repository implements a Hamiltonian-informed Generative Adversarial Network (GAN) to model and generate time-optimal trajectories for the Zermelo Navigation problem.
+This program implements a Hamiltonian-informed Generative Adversarial Network (GAN) to model and generate time-optimal trajectories for the Zermelo Navigation problem.
 The generator is trained not only to fool the discriminator but also to minimize a physics-based loss computed from the system's Hamiltonian, ensuring physical consistency in the generated trajectories.
 The training data consists of 4000 expert trajectories in a 7D state space. 
 The generator maps 20-dimensional latent vectors to 175-dimensional state trajectories, while the discriminator evaluates the realism of partial trajectory representations. 
