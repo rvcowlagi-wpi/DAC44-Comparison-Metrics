@@ -1,4 +1,4 @@
-This program implements a Standard Variational Autoencoder (S-VAE) designed to model trajectory data (2057 features) for a the minimum threat navigation problem. 
+This program implements a Standard Variational Autoencoder (S-VAE) designed to model trajectory data (2057 features) for the Minimum Threat Exposure Problem. 
 The architecture uses a encoder-decoder structure to compress trajectories into a 32-dimensional latent space and reconstruct them with minimal error. 
 Training is performed using a combination of mean squared reconstruction loss and Kullback-Leibler divergence to regularize the latent space. 
 The model is trained on 200 trajectories sampled from a dataset of 1000, with early stopping based on total epoch loss. 
