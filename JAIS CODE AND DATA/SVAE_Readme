@@ -1,6 +1,6 @@
 This program implements a Standard Variational Autoencoder (S-VAE) for the Zermelo Navigation problem, focusing on learning compact latent representations of time-optimal trajectories in a 7D state space. 
 The model consists of a encoder that compresses 400-dimensional trajectory inputs into a 32-dimensional latent space and a decoder that reconstructs full trajectories from latent vectors.
 The training minimizes a combined loss of trajectory reconstruction (via MSE) and a Kullback-Leibler divergence term to enforce latent space regularization. 
-The S-VAE is trained using 500/4000 expert trajectories
+The S-VAE is trained using 500/4000 OTD of trajectories
 After 2000 epochs, the trained model is used to generate 1000 synthetic trajectories by sampling from the learned latent space. 
 These generated samples, representative of physically plausible navigational behavior, are saved for downstream use in analysis or control applications.
