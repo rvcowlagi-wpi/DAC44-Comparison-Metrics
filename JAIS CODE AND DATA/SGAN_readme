@@ -1,0 +1,6 @@
+This repository contains the implementation of a Generative Adversarial Network (GAN) designed to learn and generate optimal trajectories for the Zermelo Navigation problem. 
+The model is trained on a dataset of 4000 time-optimal trajectories between fixed start and end positions in a 7-dimensional state space. 
+The GAN consists of a deep feedforward generator that maps 20-dimensional latent vectors to 175-dimensional trajectory outputs, and a discriminator that classifies trajectories as real or fake. 
+Training uses binary cross-entropy loss with stochastic gradient descent and runs on GPU by default. 
+After training, the generator can produce synthetic trajectories that mimic the statistical characteristics of the true data. 
+The code saves both the trained models and 1000 generated samples to disk for further analysis or downstream tasks.
