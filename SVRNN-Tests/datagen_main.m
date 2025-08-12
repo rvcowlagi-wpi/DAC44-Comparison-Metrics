@@ -37,7 +37,7 @@ clear variables; close all; clc;
 nTrials		= 1000;
 nTimePts	= 1000;
 tFin		= 10;
-nState		= 100;
+nState		= 6;
 dataSize	= nTimePts*nState;
 case_		= 1;
 set_		= 9;
@@ -61,7 +61,7 @@ systemDataFileName = [foldername_ 'systemData.mat'];
 nComplexPair= floor(nState/4);
 nReal		= nState - 2*nComplexPair;
 
-rng(set_, 'twister');
+rng(0.9*set_, 'twister');
 realEVs		= -5 + 4*rand(nReal, 1);
 complexPart = 5*rand(nComplexPair, 1);
 realPart	= -5 + 4*rand(nComplexPair, 1);
@@ -83,24 +83,40 @@ S	= sprandsym(nState, 1);
 %----- Get A matrix from a similarity transformation 
 A	= S * A_ / S;
 
+C	= [1 zeros(1, nState-1)];
+
 %----- Noise transformation
 G	= 0.5*randn(nState, 1);
 
 systemParameters.A = A;
 systemParameters.G = G;
 
-save(systemDataFileName, 'A', 'G')
+% save(systemDataFileName, 'A', 'G')
+
+ySimStore = zeros(nTrials, nTimePts + 1);
 
 %% Run trials
-
+figure
 for m = 1:nTrials
 	xSim	= single(caseHandle(m, nState, nTimePts, tFin, systemParameters));
-	filename_ = [foldername_ 'traj_' num2str(m, '%5.4i') '.csv'];
+	ySim	= C*xSim;
+	ySimStore(m, :)	= ySim;
+	filename_	= [foldername_ 'traj_' num2str(m, '%5.4i') '.csv'];
 
 	% figure
-	% plot(linspace(0,tFin, nTimePts+1), xSim, 'LineWidth', 2)
+	plot(linspace(0,tFin, nTimePts+1), ySim, 'LineWidth', 2); hold on
 
-	writematrix(xSim, filename_);
+	% writematrix(xSim, filename_);
 
 end
 
+%% Scatter plot
+
+yMean	= mean(ySimStore, 1);
+yData	= ySimStore;
+
+[pcaU_, pcaS_, ~] = svd(yData, "econ");
+yPlot = pcaU_(:, 1:3) * pcaS_(1:3, 1:3);
+
+figure;
+plot3(yPlot(:, 1), yPlot(:, 2), yPlot(:, 3), '.')
