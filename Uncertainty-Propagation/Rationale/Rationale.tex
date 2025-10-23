@@ -1,0 +1,552 @@
+\documentclass[aspectratio=169,handout]{beamer} 	% <== Use this during development to save time
+%\documentclass[aspectratio=169]{beamer}		% <== Use this for final compilation (comment out previous)
+
+
+\input{Preamble-ACE-Lab-Slides}
+\input{Macros}
+
+
+
+
+\begin{document}
+
+
+
+\title[] 					% <= Short title here for footer on each slide
+{\LARGE \bf Thoughts about Generative Models in Control Systems \\   	% <= Presentation title
+	{\small \it }} 	% <= Optional subtitle
+\author[Prof. R. V. Cowlagi]{{Prof. Raghvendra V. Cowlagi}\inst{}} 		% <== Author information
+\institute[]{\inst{}Aerospace Engineering Department,\\
+	Worcester Polytechnic Institute, Worcester, MA.\\
+	\textbf{rvcowlagi@wpi.edu} \qquad \qquad		% <== Contact information
+	\textbf{wpi.edu/$\sim$rvcowlagi} \qquad  		% <== Contact information
+	\qquad \textbf{HL 247}}
+
+
+%%%%%%%%%%%%%%%% TITLE PAGE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{
+	\setbeamertemplate{footline}{}
+	\setbeamercolor{background canvas}{bg=ace-blue}
+	\setbeamercolor{normal text}{fg=white}
+	\usebeamercolor[fg]{normal text}
+	\begin{frame}[noframenumbering]
+		
+		\vspace{2\baselineskip}
+		\begin{minipage}{0.7\columnwidth}
+			\titlepage
+		\end{minipage}
+		\begin{minipage}{0.25\columnwidth}
+			\begin{center}
+				\def\logowidth{0.9\columnwidth}
+				\includegraphics[width=\logowidth]{Figures/wpi-logo-white}
+				
+				\vspace{2\baselineskip}
+				\includegraphics[width=\logowidth]{Figures/ace-logo}
+			\end{center}
+		
+		\end{minipage}
+		
+		\vspace{\baselineskip}
+		\begin{center}
+		
+		\parbox{0.8\columnwidth}{ \linespread{1} \Tiny\it\par \textbf{Fair Use Disclaimer:}
+			This document may contain copyrighted material, such as photographs and
+			diagrams, the use of which may not always have been specifically authorized
+			by the copyright owner. \\ The use of copyrighted material in this document
+			is in accordance with the ``fair use doctrine'' as incorporated in Title 17
+			USC \S 107 of the United States Copyright Act of 1976.}
+		\end{center}
+		
+	\end{frame}
+}
+
+
+
+\setbeamertemplate{footline}{
+	\leavevmode%
+	\hbox{%
+		\begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+			\usebeamerfont{author in head/foot} \insertshortauthor
+			\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+			\usebeamerfont{title in head/foot} \insertshorttitle
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=0.2\paperwidth,ht=2.25ex,dp=1ex,right]{footer}%
+%			\usebeamerfont{wpi-red}\insertshortdate{}\hspace*{2em}
+			\insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+	\end{beamercolorbox}}%
+	\vskip0pt%
+}
+
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{Introduction}
+	\begin{itemize}[<+->]
+		\itemsep\baselineskip
+		\item Control and estimation methods usually start with a \\ dynamical system 
+		model of the form
+		\begin{align*}
+			x(k + 1) = f( x(k), u(k), w(k) ),
+		\end{align*}
+		where%
+		\begin{itemize}
+			\item $x$ is what we call the \alert{state}
+			\item $u$ is what we call the \alert{control}
+			\item $w$ is what we call the \alert{process noise}
+		\end{itemize}
+	
+		\item Usual assumptions include:
+		\begin{itemize}
+			\item $x(k) \in \real[n], ~u(k) \in \real[m],$  where $n,m$ are ``small'' $\sim 10$
+			\item $f$ is known, e.g., from physics
+			\item $w$ is a white noise process, i.e., $w(k) \sim N(0, Q)$ and $w(k), w(\ell)$
+			are uncorrelated
+		\end{itemize}
+
+	\end{itemize}
+	
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{Nominal Model}
+	\begin{itemize}[<+->]
+		\itemsep\baselineskip
+		\item Control and estimation methods usually start with a \\ dynamical system 
+		model of the form
+		\begin{align*}
+			x(k + 1) = f( x(k), u(k), w(k) ),
+		\end{align*}
+		where%
+		\begin{itemize}
+			\item $x$ is what we call the {state}
+			\item $u$ is what we call the {control}
+			\item $w$ is what we call the {process noise}
+		\end{itemize}
+		
+		\item Let us call this the \alert{nominal model} \\
+		(to distinguish from other ``models'' that come up)
+		
+	\end{itemize}
+	
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{Nominal v/s Real}
+	\begin{itemize}[<+->]
+		\itemsep\baselineskip
+		\item The real system evolves \emph{close to,} 
+		but not \emph{exactly} according to the nominal model. Examples:
+		
+		\item $f$ is slightly different, e.g., has some extra terms 
+		due to simplifications, approximations, epistemic uncertainties
+		
+		\item $w$ is not white noise
+		
+		\item There are extra (hidden) states, e.g., actuator dynamics
+		
+		
+	\end{itemize}
+	
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{The Uncertainty Propagation Problem}
+	\begin{itemize}[<+->]
+		\itemsep\baselineskip
+		\item We are usually interested in the conditional distribution
+		$p(x(k + 1) ~|~ x(k), u(k))$ \\
+		for designing estimators or controllers (esp. RL-based controllers)
+		\begin{itemize}
+			\item Estimators like EKF / UKF need the mean and variance
+			\item Particle filter, RL methods need samples 
+		\end{itemize}
+		
+		\item \alert{Option 1} (most common practice): Find this distribution 
+		from the nominal model
+		\begin{itemize}
+			\item This approach involves approximations when $f$ is nonlinear:
+			e.g., linearization or unscented transform
+			\item Essentially, we entirely neglect the differences between reality 
+			and nominal model and hope that the controller / estimator is robust enough
+		\end{itemize}
+		
+		\item \alert{Option 2} (the adaptive control approach): Append a ``structured
+		uncertainty'' term $\Phi$ to $f$ and learn its parameters through open- and 
+		closed-loop training
+		\begin{itemize}
+			\item $\Phi$ often resembles a single-layer NN, e.g., weighted sum of RBFs
+			
+			\item Sometimes used in estimation as well
+					
+		\end{itemize}
+		
+	\end{itemize}
+	
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{Data}
+	\begin{itemize}[<+->]
+		\itemsep \baselineskip
+		
+		\item We have some \alert{real trajectories}, i.e., time series 
+		$\tilde{\xi}(k) = (\tilde{x}(k), \tilde{u}(k))$ recorded during 
+		operation of the real system
+		\begin{itemize}
+			\item These are scarce
+		\end{itemize}
+		
+		\item We have some \alert{nominal trajectories}, time series 
+		$\xi(k) = (x(k), u(k))$ resulting from simulation of the nominal model
+		\begin{itemize}
+			\item These are abundant
+		\end{itemize}
+		
+	\end{itemize}
+	
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{Rationale}
+	\begin{itemize}[<+->]
+		\itemsep \baselineskip
+		
+		\item The unscented transform is motivated by the idea that it is better to
+		approximate the \emph{distribution} propagated through $f,$ than to approximate
+		$f$ itself (e.g., by linearization)
+		
+		\item Which suggests that Options~1 and~2 may be outperformed by ...
+		
+		\item \alert{Option 3:} Train a conditioned generative model on both
+		real and nominal trajectories to produce samples of 
+		$x(k + 1)$ for given $x(k), u(k)$
+	
+		
+	\end{itemize}
+	
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{Case Study 1}
+	\begin{itemize}[<+->]
+		\itemsep \baselineskip
+		
+		\item Nominal model is linear:
+		\begin{align*}
+			x(k + 1) &= A x(k) + B u(k)
+		\end{align*}
+		
+		\item Suppose $x(k) \in \real[2], ~u(k) \in \real$ and $A$ is Hurwitz: 
+		$Re$(both eigenvalues) $< 0$
+		
+		\item Real system does not have process noise, but has unmodeled terms:
+		\begin{align*}
+			x(k + 1) &= A x(k) + B u(k) + \mathalert{\tilde{f}(x(k))}
+		\end{align*}
+		
+		
+	\end{itemize}
+	
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+	\frametitle{Questions for Randy}
+	
+	\begin{minipage}{0.7\columnwidth}
+	\begin{itemize}[<+->]
+		\itemsep \baselineskip
+		
+		\item Are there generative models in other domains (e.g., text / image)
+		that address this type of a problem?
+		
+		\item Perhaps a ``variational propagator''?
+		\begin{align*}
+			\xi=(x,u) &\rightarrow p(z | \xi) &
+			z \sim p(z | \xi) &\rightarrow D(z)
+		\end{align*}
+		\begin{itemize}
+			\item Loss$ = \lambda_1 \| D(z) - \mathalert{x(k+1)} \| + 
+			\lambda_2 KL(p~|| \mathcal{N}(0,I) ) + \lambda_3 \underbrace{\|x - f(x,u)\|}_{\text{or } \left| \|x 
+			- f(x,u) \| - \varepsilon \right|}$
+		\end{itemize}
+		
+		\item How can we ``condition'' this on $x(k), u(k)$?
+	\end{itemize}
+	\end{minipage}
+	\begin{minipage}{0.25\columnwidth}
+		\centering
+		\vspace*{2\baselineskip}
+		\includegraphics[width=0.8\columnwidth]{Figures/kneelingprayer}
+	\end{minipage}
+
+
+\end{frame}
+%---------------------------------------------------------------------------------------------
+
+%
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Practices to Follow and Avoid (1/2)}
+%	
+%	\begin{minipage}{0.6\columnwidth}
+%		\begin{itemize}[<+->]
+%			\itemsep \baselineskip
+%			
+%			\item Bulleted lists should appear one bullet at a time.
+%			\begin{itemize}
+%				\item Use \texttt{handout} option in \texttt{$\backslash$documentclass}
+%				to save time while developing the presentation; remove that option to create the final PDF.
+%				\item Each bullet should be exactly one sentence.
+%				\item Use multiple bullets and sub-bullets as needed.
+%			\end{itemize}
+%			
+%			\item Use text sparingly.
+%			\begin{itemize}
+%				\item Instead of text, consider using relevant images.
+%				\item Not everything you want to say needs to appear on the slide.
+%				\item Your oral presentation should be more than just reading the slides aloud.
+%			\end{itemize}
+%			
+%			
+%		\end{itemize}
+%	\end{minipage}
+%	\hspace{0.01\columnwidth}
+%	\begin{minipage}{0.34\columnwidth}
+%		\begin{center}
+%			\includegraphics[width=\columnwidth]{Figures/more-less}
+%			\figcaption{
+%			Source: https://nextadagency.com/less-is-more-when-it-comes-to-your-website-content/
+%			}
+%		\end{center}
+%		
+%		
+%		
+%	\end{minipage}
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%\begin{frame}
+%%	\frametitle{Title}
+%%	\vspace{-8\baselineskip}
+%%	How to pronounce my last name: ``cow-luh-gee''
+%%	\vspace{\baselineskip}
+%%	
+%%	A brief bio:
+%%	
+%%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Practices to Follow and Avoid (2/2)}
+%	
+%	\begin{itemize}[<+->]
+%		\itemsep \baselineskip
+%		\item Beamer is designed to ensure visual consistency.
+%		\begin{itemize}
+%			\item Do not manually change font sizes, colors, etc., 
+%			unless \alert{absolutely} needed.
+%			\item If you feel the need to reduce the font size or spacing, 
+%			you are probably trying to put too much text in one slide.
+%		\end{itemize}
+%	
+%		\item Explain all notation at first use for all math. equations / expressions, e.g.,
+%		$$ c(\vec{p},t) = \Phi^\intercal(\vec{p}) \Theta(t). $$
+%		\begin{itemize}
+%			\item $c$ is a threat field defined over space $\vec{p}$ 
+%			and time $t,$
+%			\item $\Phi$ is a basis function vector and $\Theta$ is
+%			a parameter vector.
+%		\end{itemize}
+%	\end{itemize}
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Resources}
+%	
+%	\begin{itemize}[<+->]
+%		\itemsep \baselineskip
+%		\item \url{https://www.overleaf.com/learn/latex/Beamer}
+%		
+%		\item 
+%		
+%\url{https://www.wiley.com/en-us/network/publishing/research-publishing/writing-and-conducting-research/6-tips-for-giving-a-fabulous-academic-presentation}
+%		
+%		\item The source code for this presentation has some examples of typical slide layouts.
+%	\end{itemize}
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Example of Bulleted List}
+%	
+%	\begin{itemize}[<+->]
+%		\itemsep \baselineskip
+%		\item Each bullet appears one at a time due to the \texttt{[<+->]} option
+%		in the \texttt{itemize} environment.
+%		
+%		\item Bullet 2 $\ldots$
+%		
+%		\item Bullet 3 $\ldots$
+%		\begin{itemize}
+%			\item Sub-bullet 1 $\ldots$
+%			\item Learn about \texttt{overlay} and \texttt{pause} for more
+%			control  over \\the sequence of appearance of various items on the slide.
+%		\end{itemize}
+%	\end{itemize}
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Example of a Slide with a Single Image}
+%	
+%	\begin{center}
+%		\includegraphics[width=0.5\columnwidth]{Figures/sample-threat}
+%		\figcaption{Insert a concise and relevant caption. 
+%			Include source if it is not your original image.}
+%	\end{center}
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Example of a Slide with Juxtaposed Images}
+%	
+%	
+%		\begin{figure}
+%			\centering
+%			\subfigure{\includegraphics[width=0.25\columnwidth]{Figures/sample-threat}}
+%			\hspace{0.05\columnwidth}
+%			\subfigure{\includegraphics[width=0.25\columnwidth]{Figures/sample-threat}}
+%		\end{figure}		
+%		\figcaption{Use \texttt{subfigure} or to put multiple images. Next slide
+%		uses the \texttt{picture} environment for more complex image/text layouts.}
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Example of a Non-Standard Layout with Images and Text}
+%	
+%		\begin{picture}(0,0)(-10,-30)
+%			\put(0,0){\includegraphics[width=0.3\columnwidth]{Figures/logo-gatech}}
+%			\put(150,7){\parbox{0.75\columnwidth}{\footnotesize \begin{itemize}
+%									\listformat \item Ph.D., 2011. \item Research on autonomous aircraft.
+%						\end{itemize}}}
+%			
+%			\put(0,-50){\includegraphics[width=0.3\columnwidth]{Figures/logo-mit}}
+%			\put(150,-40){\parbox{0.75\columnwidth}{\footnotesize \begin{itemize}
+%									\listformat \item Postdoc, 2011 -- 12. \item Research on autonomous cars.
+%						\end{itemize}}}
+%			
+%			\put(0,-100){\includegraphics[width=0.3\columnwidth]{Figures/logo-aurora}}
+%			\put(150,-90){\parbox{0.75\columnwidth}{\footnotesize \begin{itemize}
+%									\listformat \item 2012 -- 13. \item Research on autonomous aircraft.
+%						\end{itemize}}}
+%		\end{picture}
+%
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+%
+%
+%%%%%%%%%%%%%%%%% NEW FRAME %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{frame}
+%	\frametitle{Example of a Slide with a Main Mathematical Result}
+%	
+%	\begin{center}
+%		\begin{minipage}{0.8\columnwidth}
+%			
+%				\begin{theorem}[Convergence]
+%					The CSCP algorithm converges in a finite number of iterations and
+%					$$ \mathbb{P}[J(u^*) \leq \varepsilon] \geq 0.99. $$
+%				\end{theorem}
+%				\pause
+%			
+%				Save this block environment for important results. Do not overuse.
+%		\end{minipage}
+%	\end{center}
+%	
+%\end{frame}
+%%---------------------------------------------------------------------------------------------
+
+
+
+\end{document}
+

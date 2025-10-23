@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 os.remove("Data/data_mintime.txt")
-all_files = glob.glob(os.path.join("Data/Variable-Wind-Constant-Endpoints/F50", "*.csv"))
+all_files = glob.glob(os.path.join("Data/Variable-Wind-Constant-Endpoints/F175", "*.csv"))
 
 data = []
 for file in all_files:

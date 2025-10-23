@@ -37,7 +37,7 @@ trajectory.
 clear variables; close all; clc;
 
 %------ For traditional Zermelo solutions
-nTrajectories	= 10000;
+nTrajectories	= 1%10000;
 nDiscretization	= 100;
 % size_data	= nDiscretization*12 + 7; 
 size_data	= nDiscretization*8 + 7; % <==== REMOVING WIND GRADIENTS FROM DATA
@@ -55,7 +55,7 @@ size_data	= nDiscretization*8 + 7; % <==== REMOVING WIND GRADIENTS FROM DATA
 %}
 baseline_data = zeros(size_data, nTrajectories);
 remove_trials = false(1,nTrajectories);
-parfor m = 1:nTrajectories
+for m = 1:nTrajectories
 	disp(m)
 	[sim_result_, solution_found_] = mintime_solver(nDiscretization);
 	if solution_found_
@@ -75,16 +75,19 @@ baseline_data(:, remove_trials) = [];	% remove trials where no solution was foun
 % 	num2str(n_trials, '%.4i') '_t' num2str(posixtime(datetime(datestr(now))))];
 % mkdir(foldername_)
 
-save dataset3_var_wind.mat baseline_data
+% save dataset3_var_wind.mat baseline_data
 
 % Write data to CSV files using datagen_training.m
 
 return
 
 %% Plot a randomly chosen trajectory
-this_trial	= 1 + round(rand*(nDiscretization - 1));
-filename_	= [foldername_ '/mintime_points' num2str(this_trial) '.csv'];
-this_traj	= readmatrix(filename_);
+% this_trial	= 1 + round(rand*(nDiscretization - 1));
+% filename_	= [foldername_ '/mintime_points' num2str(this_trial) '.csv'];
+% this_traj	= readmatrix(filename_);
+
+this_traj	= baseline_data(8+nDiscretization:end, 1);
+this_traj	= reshape(this_traj, nDiscretization, 7);
 
 wksp		= 1;
 n_plot_pts	= 21;
@@ -123,6 +126,8 @@ xlabel('$p_x$ (normalized units)', 'FontName', 'Times New Roman', ...
 	'FontSize', 20, 'FontAngle', 'italic', 'FontWeight', 'bold', 'interpreter', 'latex');
 ylabel('$p_y$ (normalized units)', 'FontName', 'Times New Roman', ...
 	'FontSize', 20, 'FontAngle', 'italic', 'FontWeight', 'bold', 'interpreter', 'latex'); 
+
+return
 
 %% Zero Hamiltonian and psi-dot tests for trajectory
 

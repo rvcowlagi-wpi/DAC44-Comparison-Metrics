@@ -140,7 +140,7 @@ def main():
         # with torch.no_grad():
         #     for input,labels in eval_loader:
         #         input, labels = input.to(device),labels.to(device)
-        #         eval_output = modelD(input)
+        #         eval_output = theDiscriminator(input)
         #         e_acc = binary_acc(eval_output, labels.unsqueeze(1))
         #         eval_acc += e_acc.item()
 

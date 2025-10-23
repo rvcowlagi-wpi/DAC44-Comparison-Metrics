@@ -48,7 +48,7 @@ def main():
     testX = torch.tensor(testX, dtype=torch.float32).to(device)
     # print(testX)
     discriminator_output = torch.sigmoid(modelD(testX))
-    # discriminator_output = modelD(testX)
+    # discriminator_output = theDiscriminator(testX)
     # print(discriminator_output)
     # print(testX.shape)
     # for op in discriminator_output:
@@ -56,7 +56,7 @@ def main():
     #
     # return
     #
-    #discriminator_output = (modelD(testX))
+    #discriminator_output = (theDiscriminator(testX))
     #print(discriminator_output)
     #print(discriminator_output.shape)
     diff = np.empty(len(discriminator_output))

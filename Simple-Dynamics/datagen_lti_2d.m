@@ -34,7 +34,7 @@ of the trajectories is fixed at 10s.
 
 clear variables; close all; clc;
 
-n_trials	= 1;
+n_trials	= 70;
 n_traj_pts	= 100;
 n_state		= 2;
 size_data	= n_traj_pts*n_state;
@@ -61,18 +61,13 @@ foldername_ = 'Data/lti_2d_trajectories';
 delete([foldername_ '/*.csv'])
 
 for k1 = 1:n_traj_examples
-	traj_k1		= zeros(n_traj_pts, 1); %zeros(n_traj_pts, n_state);
-	for k2 = 1:1%n_state
-		traj_k1(:, k2) = baseline_data( ...
-			(1 + (k2 - 1)*n_traj_pts):(k2*n_traj_pts), k1 );
-	end
-	
-	filename_ = [foldername_ '/lti_1d_points' num2str(k1) '.csv'];
+	traj_k1		= baseline_data(:, k1 );	
+	filename_ = [foldername_ '/lti_2d_points' num2str(k1) '.csv'];
 
-% 	writematrix(traj_k1, filename_ );
+	writematrix(traj_k1, filename_ );
 end
 
-
+return
 
 %% Plot a randomly chosen trajectory
 this_trial	= 1 + round(rand*(n_traj_examples - 1));

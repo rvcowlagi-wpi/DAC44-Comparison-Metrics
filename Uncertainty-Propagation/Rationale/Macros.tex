@@ -1,0 +1,186 @@
+%=============================================================================================
+%----- Commonly used math symbols
+\newcommand{\real}[1][]{\mathbb{R}^{#1}}                                % Set of reals
+\newcommand{\nat}[1][]{\mathbb{N}^{#1}}                                 % Set of natural #s
+\newcommand{\integer}[1][]{\mathbb{Z}^{#1}}                             % Set of integers
+\newcommand{\circspace}[1][]{\mathbb{S}^{#1}}                           % S^n space
+\newcommand{\leb}[1][]{\mathbb{L}^{#1}}
+
+\newcommand{\defeq}{:=}                                                 % Definition 
+%(assignment)
+\newcommand{\msub}[1]{_\mathrm{#1}}                                     % Roman subscript
+\newcommand{\msup}[1]{^\mathrm{#1}}                                     % Roman superscript
+
+\newcommand{\trans}[1]{#1^{\intercal}}                                 % Transpose
+\newcommand{\eye}[1]{I_{(#1)}}                                          % Identity matrix
+\newcommand{\zero}[2]{{\mathbf 0}_{(#1)\times(#2)}}                     % Zero matrix
+\newcommand{\inv}[1]{{#1}^{-1}}                                         % Inverse (matrix)
+\newcommand{\rinv}[1]{#1^{-1}}                                          % Inverse (scalar)
+\newcommand{\abs}[1]{\left| #1 \right|}                                 % Absolute value
+\newcommand{\linspan}[1]{\mathsf{span} \left\{#1\right\}}               % Span
+\newcommand{\myfracA}[2]{\displaystyle{\frac{#1}{#2}}}                  % Fraction, 
+%display-style
+\newcommand{\myfracB}[2]{{#1}/{#2}}                                     % Fraction, inline
+
+\newcommand{\mydiff}[2]{\frac{\mathrm{d}{#1}}{\mathrm{d}{#2}}}      	% Derivative, plain
+\newcommand{\mydiffp}[2]{{#1}'}      	% Derivative, prime
+\newcommand{\mydiffn}[3]{{#1}^{(#3)}}      	% Derivative, prime
+\newcommand{\mydiffnA}[3]{\frac{\mathrm{d}^{#3}{#1}}{\mathrm{d}{#2}^{#3}}}      	% 
+%Derivative, plain
+\newcommand{\mydiffA}[2]{\myfracA{\mathrm{d}}{\mathrm{d}{#2}}{#1}}      % Derivative, 
+%display-sty
+\newcommand{\mydiffB}[2]{\mathrm{d}{#1}/\mathrm{d}{#2}}                 % Derivative, inline
+\newcommand{\df}{\mathrm{d}}                                            % Differential
+\newcommand{\parder}[2]{\frac{\partial #1}{\partial #2}}                % Partial derv.
+\newcommand{\pardern}[3]{\frac{\partial^{#3} #1}{\partial {#2}^{#3}}}   % Partial derv.
+\newcommand{\parders}[2]{{#1}_{#2}}   % Partial derv.
+\newcommand{\innerp}[2]{\left\langle {#1}, {#2} \right\rangle}     		% Inner product
+\newcommand{\dotprod}[2]{ {#1} \cdot {#2} }
+\newcommand{\hessian}[1]{\mathbf{H}(#1)}
+
+\newcommand{\scos}[1]{C_{#1}}
+\newcommand{\ssin}[1]{S_{#1}}
+\newcommand{\stan}[1]{T_{#1}}
+
+\newcommand{\acos}[1]{\cos^{-1}\left(#1\right)}                         % arccos
+\newcommand{\asin}[1]{\sin^{-1}\left(#1\right)}                         % arcsin
+\newcommand{\atan}[1]{\tan^{-1}\left(#1\right)}                         % arctan
+\newcommand{\ppbt}{\frac{\pi}{2}}                                       % +pi/2
+\newcommand{\mpbt}{-\frac{\pi}{2}}                                      % -pi/2
+\newcommand{\half}{ {\textstyle{\frac{1}{2}}} }							% Half
+\newcommand{\quarter}{ {\textstyle{\frac{1}{4}}} }							% Half
+
+\newcommand{\clint}[2]{\left[#1, #2\right]}                             % Closed interval
+\newcommand{\opint}[2]{\left(#1, #2\right)}                             % Open interval
+\newcommand{\lopint}[2]{(#1, #2]}                                       % Left-open interval
+\newcommand{\ropint}[2]{\left[#1, #2\right)}                            % Right-open interval
+
+\renewcommand{\leq}{\leqslant}                                          % Slanted leq
+\renewcommand{\geq}{\geqslant}                                          % Slanted geq
+
+\newcommand{\myinfty}{\chi}
+
+\newcommand{\tento}[1]{\times 10^{#1}}
+\newcommand{\msq}{m/s\textsuperscript{2}}
+
+%=============================================================================================
+%----- Shortcuts for commonly used phrases and mark-ups
+\newcommand{\mydef}[1]{{\textbf{#1}}\index{#1}}                          
+\newcommand{\markup}[1]{ {\hl{ #1 }} }
+\newcommand{\rcmargin}[2]{{\color{blue}{#1}}
+	\marginpar{\scriptsize\color{blue} #2}}
+\newcommand{\rccomment}[2]{{\textcolor{red}{\textul{#1}}} \markup{#2}}
+
+\newcommand{\rhs}{\textsc{r.h.s.}}                                      % Right hand side
+\newcommand{\lhs}{\textsc{l.h.s.}}                                      % Left hand side
+\newcommand{\wrt}{with respect to}                                      % or w.r.t.
+\newcommand{\comingsoon}{\includegraphics[width=0.2\columnwidth]{\figpath/coming-soon}}
+
+%=============================================================================================
+%----- Acronyms
+\newcommand{\ppl}{ath-planning}
+\newcommand{\mpl}{otion-planning}
+\newcommand{\tpl}{ask-planning}
+\newcommand{\rpl}{oute-planning}
+\newcommand{\cipl}{ondition-informed m\mpl}
+\newcommand{\ips}{nteractive planning and sensing}
+\newcommand{\mr}{ultiresolution}                                      	% Multi-resolution
+\newcommand{\slam}{{SLAM}}                                       		% SLAM
+\newcommand{\rrt}{{RRT}}
+\newcommand{\rrts}{{RRT}$^*$}
+\newcommand{\syclop}{\textsc{s}y\textsc{cl}o\textsc{p}}
+\newcommand{\cbta}{CBTA}
+\newcommand{\nh}{onholonomic}                                           % nonholonomic
+\newcommand{\dwt}{DWT}
+\newcommand{\astar}{A$^*$}
+\newcommand{\cpsf}{yber-physical system}
+\newcommand{\vvc}{VV\&C}
+\newcommand{\matlab}{MATLAB\textsuperscript{\textregistered}}
+\newcommand{\phyphox}{Phyphox\textsuperscript{\textregistered}}
+\def\cps{cyberphysical}
+\def\Cps{Cyberphysical}
+
+\def\canvas{\textit{Canvas}}
+\def\teams{\textit{Teams}}
+
+%=============================================================================================
+%----- Algorithm
+\newcommand{\algtoprule}{\hrule depth 2pt width \columnwidth \vspace{1ex}}
+\newcommand{\alghead}[1]{\begin{center} \textbf{{#1}} \end{center} \vspace{-\baselineskip}}
+\newcommand{\algheadnoio}[1]{\begin{center} \textbf{{#1}} \end{center} \vspace{-1ex}}
+\newcommand{\algmidrule}{\hrule depth 0.5pt width \columnwidth \vspace{1ex}}
+\newcommand{\algbottomrule}{\vspace{1ex} \hrule depth 2pt width \columnwidth}
+\newcommand{\algio}[2]{\begin{center} \noindent \textbf{Input}: #1 \qquad \textbf{Output:} #2 
+	\end{center} \vspace{-0.25\baselineskip} }
+\newcommand{\algproc}[1]{\raggedright \textbf{procedure}~\textsc{#1}}%
+
+
+%=============================================================================================
+%----- List formatting
+\newcommand{\listformat}{\vspace{-0.35\baselineskip}\itemsep 0pt}
+\newcommand{\tightlistformat}{\vspace{-0.35\baselineskip}\itemsep -0.5ex}
+\newcommand{\looselistformat}{\vspace{-0.4\baselineskip}\itemsep 1ex}
+
+
+
+%=============================================================================================
+%----- Figure and equation references
+
+\newcommand{\eqnnt}[1]{\hyperref[#1]{(\ref*{#1})}}
+\newcommand{\eqnsnt}[2]{\hyperref[#1]{(\ref*{#1})}
+	and~\hyperref[#2]{(\ref*{#2})}}
+\newcommand{\eqnsernt}[2]{\hyperref[#1]{(\ref*{#1})}--\hyperref[#2]{(\ref*{#2})}}
+
+
+\newcommand{\eqn}[1]{\hyperref[#1]{Eqn.~(\ref*{#1})}}
+\newcommand{\eqns}[2]{\hyperref[#1]{Eqns.~(\ref*{#1})} and~\hyperref[#2]{(\ref*{#2})}}
+\newcommand{\eqnser}[2]{\hyperref[#1]{Eqns.~(\ref*{#1})}--\hyperref[#2]{(\ref*{#2})}}
+\newcommand{\eqnf}[1]{\hyperref[#1]{Equation~(\ref*{#1})}}
+\newcommand{\eqnfs}[2]{\hyperref[#1]{Equations~(\ref*{#1})} and~\hyperref[#2]{(\ref*{#2})}}
+
+\newcommand{\scn}[1]{\hyperref[#1]{Section~\ref*{#1}}}
+\newcommand{\scns}[2]{\hyperref[#1]{Sections~\ref*{#1}} and~\hyperref[#2]{\ref*{#2}}}
+\newcommand{\scnser}[2]{\hyperref[#1]{Sections~\ref*{#1}}--\hyperref[#2]{\ref*{#2}}}
+
+\newcommand{\fig}[1]{\hyperref[#1]{Fig.~\ref*{#1}}}
+\newcommand{\figs}[2]{\hyperref[#1]{Figs.~\ref*{#1}} and~\hyperref[#2]{\ref*{#2}}}
+\newcommand{\figser}[2]{\hyperref[#1]{Figs.~\ref*{#1}}--\hyperref[#2]{\ref*{#2}}}
+\newcommand{\figf}[1]{\hyperref[#1]{Figure~\ref*{#1}}}
+\newcommand{\figfs}[2]{\hyperref[#1]{Figures~\ref*{#1}} and~\hyperref[#2]{\ref*{#2}}}
+\newcommand{\figfser}[2]{\hyperref[#1]{Figures~\ref*{#1}}--\hyperref[#2]{\ref*{#2}}}
+
+\newcommand{\tbl}[1]{\hyperref[#1]{Table~\ref*{#1}}}
+\newcommand{\tbls}[2]{\hyperref[#1]{Tables~\ref*{#1}} and~\hyperref[#2]{\ref*{#2}}}
+
+\newcommand{\apx}[1]{\hyperref[#1]{Appendix~\ref*{#1}}}
+
+\newcommand{\exmpl}[1]{\hyperref[#1]{Example~\ref*{#1}}}
+\newcommand{\exmpls}[2]{\hyperref[#1]{Examples~\ref*{#1}} and~\hyperref[#2]{\ref*{#2}}}
+\newcommand{\exmplser}[2]{\hyperref[#1]{Examples~\ref*{#1}}--\hyperref[#2]{(\ref*{#2})}}
+
+\newcommand{\chp}[1]{\hyperref[#1]{Chapter~\ref*{#1}}}
+\newcommand{\chps}[2]{\hyperref[#1]{Chapters~\ref*{#1}} and~\hyperref[#2]{(\ref*{#2})}}
+\newcommand{\chpser}[2]{\hyperref[#1]{Chapters~\ref*{#1}}--\hyperref[#2]{(\ref*{#2})}}
+
+\newcommand{\prb}[1]{\hyperref[#1]{Problem~\ref*{#1}}}
+\newcommand{\prp}[1]{\hyperref[#1]{Prop.~\ref*{#1}}}
+\newcommand{\prpf}[1]{\hyperref[#1]{Proposition~\ref*{#1}}}
+
+\newcommand{\algref}[1]{\hyperref[#1]{Algorithm~\ref*{#1}}}
+
+\newcommand{\thmref}[1]{\hyperref[#1]{Theorem~\ref*{#1}}}
+\newcommand{\thmsref}[2]{\hyperref[#1]{Theorems~\ref*{#1}} and~\hyperref[#2]{\ref*{#2}}}
+\newcommand{\thmserref}[2]{\hyperref[#1]{Theorems~\ref*{#1}}--\hyperref[#2]{\ref*{#2}}}
+
+
+\newcommand{\algline}[1]{\hyperref[#1]{Line~\ref*{#1}}}
+\newcommand{\alglines}[2]{\hyperref[#1]{Lines~\ref*{#1}} and~\hyperref[#2]{\ref*{#2}}}
+\newcommand{\alglineser}[2]{\hyperref[#1]{Lines~\ref*{#1}}--\hyperref[#2]{\ref*{#2}}}
+\newcommand{\algassign}{\defeq}
+
+
+\renewcommand{\vec}[1]{\boldsymbol{#1}}
+
+
+\definecolor{wpi-gray}{RGB}{169,176,183}
+\newcommand{\makegray}[1]{\textcolor{wpi-gray}{#1}}

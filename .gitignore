@@ -267,7 +267,21 @@ octave-workspace
 # Data
 *.csv
 *.txt
+*.xml
 
 # Sandbox
 sandbox.py
 Minimum-Time/Data/data_mintime.txt
+
+*.DS_Store
+*.iml
+
+# Torch NN model
+*.pt
+Uncertainty-Propagation/Rationale/Rationale.aux
+Uncertainty-Propagation/Rationale/Rationale.nav
+Uncertainty-Propagation/Rationale/Rationale.out
+Uncertainty-Propagation/Rationale/Rationale.snm
+Uncertainty-Propagation/Rationale/Rationale.synctex.gz
+Uncertainty-Propagation/Rationale/Rationale.toc
+Uncertainty-Propagation/.idea/.name

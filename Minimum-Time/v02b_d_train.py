@@ -16,9 +16,9 @@ device = "cuda"
 
 start_clock = time.time()
 
-n_features = 50
+n_features = 175
 n_discretization = 25
-my_batch_size = 50
+my_batch_size = 2000
 
 data_mintime = np.array(pd.read_csv('Data/data_mintime.txt'))
 train_loader = torch.utils.data.DataLoader(data_mintime, batch_size=my_batch_size)
@@ -204,11 +204,11 @@ for m1 in range(0, 3):
         # ax1[m1, m2].plot(x_term[0], x_term[1], marker="s", markersize=5)
         # ax1[m1, m2].axis('equal')
 
-# figname_ = "Results/2023-01-14-LTI/lti_1d_ep" + str(n_epochs) + "_ex" + \
-#            str(len(train_loader.dataset) // n_features) + "_pt" + str(n_features) + ".png"
-# figname_ = "Results/2023-01-14-LTI/lti_2d_ep" + str(n_epochs) + "_ex" + \
-#            str(len(train_loader.dataset)) + "_pt" + str(n_features) + ".png"
-# fig1.savefig(figname_, bbox_inches='tight')
+# figName = "Results/2023-01-14-LTI/lti_1d_ep" + str(nEpochs) + "_ex" + \
+#            str(len(train_loader.dataset) // nFeatures) + "_pt" + str(nFeatures) + ".png"
+# figName = "Results/2023-01-14-LTI/lti_2d_ep" + str(nEpochs) + "_ex" + \
+#            str(len(train_loader.dataset)) + "_pt" + str(nFeatures) + ".png"
+# fig1.savefig(figName, bbox_inches='tight')
 
 
 fig2 = plt.figure()

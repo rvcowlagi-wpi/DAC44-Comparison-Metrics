@@ -1,0 +1,81 @@
+\usepackage{color}
+\usepackage{subfigure}
+\usepackage{soul}
+\usepackage{upgreek}
+\usepackage{tikz}
+\usepackage{ctable}
+
+
+\mode<presentation>
+
+%========== Presentation Theme ===========
+\definecolor{wpi-red}{RGB}{175, 43, 55}
+\definecolor{ace-blue}{RGB}{31,52,77}
+\definecolor{ace-yellow}{RGB}{254,250,201}
+\definecolor{my-gray}{gray}{0.9}
+
+\usetheme{boxes}
+\usecolortheme{orchid}
+
+\setbeamercolor{title}{fg=ace-yellow}
+\setbeamercolor{frametitle}{fg=white,bg=ace-blue}
+\setbeamercolor{alerted text}{fg=wpi-red}
+\setbeamercolor{normal text}{fg=black}
+\setbeamercolor{item}{fg=black}
+\setbeamercolor{footer}{fg=white,bg=ace-blue}
+\setbeamercolor{author in head/foot}{fg=white,bg=ace-blue}
+\setbeamercolor{title in head/foot}{fg=ace-blue,bg=my-gray}
+
+\setbeamerfont{frametitle}{size=\Large}
+\setbeamerfont{alerted text}{shape=\itshape}
+
+\usepackage{charter}
+\usepackage[T1]{fontenc}
+\usefonttheme{serif}
+%\usefonttheme[onlymath]{serif}
+
+
+\setbeamertemplate{frametitle}[default][center]
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}{\centering\tiny\insertcaption\par}
+
+
+\setlength{\fboxrule}{1.5pt}
+\setlength\abovecaptionskip{-0.3\baselineskip}
+\setlength\belowcaptionskip{0.25\baselineskip}
+
+\addtobeamertemplate{frametitle}{\vspace*{0\baselineskip}}{\vspace*{-0.06\textwidth}
+	\hspace*{0.9345\textwidth}\includegraphics[width=0.1\textwidth]{Figures/ace-logo}\vspace*{-0.06\textwidth}}
+
+
+\setbeamercolor{block title example}{fg=white,	bg=ace-blue}
+\setbeamercolor{block title}{fg=white,	bg=wpi-red}
+\setbeamercolor{block body example}{parent=normal text,use=block title,bg=block title.bg!10!bg}
+%\setbeamercolor{date in head/foot}{fg=wpi-red}
+
+
+\setbeamersize{text margin left=3ex,text margin right=3ex}
+
+\newcommand{\mathalert}[1]{{\color{wpi-red}#1}}
+\newcommand{\figcaption}[1]{\parbox{\columnwidth}{\centering \tiny\linespread{0.5} #1}{}}
+
+\setlength{\fboxrule}{1pt}
+\setlength{\fboxsep}{0pt}
+
+
+
+\setbeamertemplate{footline}{
+	\leavevmode%
+	\hbox{%
+		\begin{beamercolorbox}[wd=.2\paperwidth,ht=2.25ex,dp=1ex,left]{author in head/foot}%
+			\usebeamerfont{author in head/foot} \hspace*{3ex}\insertshortauthor
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=.6\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+			\usebeamerfont{title in head/foot} \insertshorttitle
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=0.2\paperwidth,ht=2.25ex,dp=1ex,right]{footer}%
+			%			\usebeamerfont{wpi-red}\insertshortdate{}\hspace*{2em}
+			\insertframenumber{} / \inserttotalframenumber\hspace*{3ex} 
+	\end{beamercolorbox}}%
+	\vskip0pt%
+}

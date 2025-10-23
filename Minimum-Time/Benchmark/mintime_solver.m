@@ -213,7 +213,7 @@ plot(q_sim_traj(:, 1), q_sim_traj(:, 2), 'k', 'LineWidth', 6);
 ax.FontName = 'Times New Roman';
 ax.FontSize = 20;
 figtitle	= ['zermelo_' num2str(posixtime(datetime(datestr(now)))) '.png'];
-% exportgraphics(ax, figtitle, 'Resolution', 300);
+exportgraphics(ax, figtitle, 'Resolution', 300);
 xlabel('$p_x$ (normalized units)', 'FontName', 'Times New Roman', ...
 	'FontSize', 20, 'FontAngle', 'italic', 'FontWeight', 'bold', 'interpreter', 'latex');
 ylabel('$p_y$ (normalized units)', 'FontName', 'Times New Roman', ...
